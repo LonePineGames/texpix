@@ -60,7 +60,6 @@ function loadImage(name, cb) {
 
 function createRow (font, fromRow, toRow, index) {
   if(font.spacing == 0) {
-    console.log(toRow, fromRow);
     font.spacing = toRow - fromRow - 4;
   }
   var fromCol = 0;
@@ -71,7 +70,7 @@ function createRow (font, fromRow, toRow, index) {
     for(;pixel === 0 && toCol < font.canvas.width; toCol ++) {
       pixel = ctx.getImageData(toCol, fromRow, 1, 1).data[0];
     }
-    createCharacter(font, fromRow + 2, toRow - 2, fromCol, toCol - 1, index.charAt(i));
+    createCharacter(font, fromRow + 2, toRow - 1, fromCol, toCol - 1, index.charAt(i));
     fromCol = toCol;
     toCol ++;
   }

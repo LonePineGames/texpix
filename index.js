@@ -2,9 +2,9 @@ var fs = require('fs')
 var Canvas = require('canvas');
 var parseFont = require('./parse-font');
 
-var inputText = "input";
+var inputText = process.argv[3];
 
-parseFont('default', (font) => {
+parseFont(process.argv[2], (font) => {
   var textWidth = getTextWidth(inputText, font);
   var size = [textWidth + 4, font.spacing + 4];
   var canvas = new Canvas(size[0], size[1]);
@@ -17,6 +17,7 @@ parseFont('default', (font) => {
 
   for(var i=0; i < inputText.length; i++) {
     var sprite = font.spriteMap[inputText[i]];
+    console.log(sprite);
     ctx.drawImage(font.image,
       sprite.location[0], sprite.location[1],
       sprite.size[0], sprite.size[1],
@@ -25,7 +26,8 @@ parseFont('default', (font) => {
     x += sprite.size[0] + 1;
   }
 
-  var out = fs.createWriteStream(__dirname + '/text.png')
+  var out = fs.createWriteStream(__dirname + '/out/' +
+    inputText.replace(/[^0-9a-zA-Z ]/g, '') + '.png')
     , stream = canvas.pngStream();
 
   stream.on('data', function(chunk){
