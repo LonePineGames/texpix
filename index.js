@@ -1,49 +1,47 @@
-
-var Canvas = require('canvas')
-  , Image = Canvas.Image;
+var fs = require('fs')
+var Canvas = require('canvas');
+var parseFont = require('./parse-font');
 
 var inputText = "input";
-var fontSize = 5;
-var textWidth = getTextWidth(inputText, fontSize);
 
-var sizeX = textWidth + 4;
-var sizeY = fontSize + 4;
+parseFont('default', (font) => {
+  var textWidth = getTextWidth(inputText, font);
+  var size = [textWidth + 4, font.spacing + 4];
+  var canvas = new Canvas(size[0], size[1]);
+  var ctx = canvas.getContext('2d');
 
-var canvas = new Canvas(textWidth + 4, fontSize +4)
-  , ctx = canvas.getContext('2d');
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, size[0], size[1]);
 
-ctx.fillStyle = "black";
-ctx.fillRect(0, 0, sizeX, sizeY);
-ctx.fillStyle = "white";
-ctx.font = fontSize + 'px Impact';
-ctx.fillText("Awesome!", 2, 2+fontSize);
+  var x = 2;
 
-var fs = require('fs')
-  , out = fs.createWriteStream(__dirname + '/text.png')
-  , stream = canvas.pngStream();
+  for(var i=0; i < inputText.length; i++) {
+    var sprite = font.spriteMap[inputText[i]];
+    ctx.drawImage(font.image,
+      sprite.location[0], sprite.location[1],
+      sprite.size[0], sprite.size[1],
+      x, 2,
+      sprite.size[0], sprite.size[1]);
+    x += sprite.size[0] + 1;
+  }
 
-stream.on('data', function(chunk){
-  out.write(chunk);
+  var out = fs.createWriteStream(__dirname + '/text.png')
+    , stream = canvas.pngStream();
+
+  stream.on('data', function(chunk){
+    out.write(chunk);
+  });
+
+  stream.on('end', function(){
+    console.log('saved png');
+  });
+
 });
 
-stream.on('end', function(){
-  console.log('saved png');
-});
-
-/**
- * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
- *
- * @param {String} text The text to be rendered.
- * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
- *
- * @see http://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
- */
 function getTextWidth(text, font) {
-    // if given, use cached canvas for better performance
-    // else, create new canvas
-    var canvas = new Canvas(textWidth + 4, fontSize +4)
-      , context = canvas.getContext('2d');
-    context.font = font;
-    var metrics = context.measureText(text);
-    return metrics.width;
+  var accum = 0;
+  for(var i=0; i < text.length; i++) {
+    accum += font.spriteMap[text[i]].size[0] + 1;
+  }
+  return accum - 1;
 }
