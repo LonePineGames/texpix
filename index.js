@@ -3,8 +3,8 @@ var Canvas = require('canvas');
 var parseFont = require('./parse-font');
 
 function writeLine(font, ctx, line, x, y) {
-  x += 2;
-  y += 2;
+  x += font.spacing;
+  y += font.spacing;
 
   for(var i=0; i < line.length; i++) {
     var sprite = font.spriteMap[line[i]];
@@ -17,7 +17,7 @@ function writeLine(font, ctx, line, x, y) {
       sprite.size[0], sprite.size[1],
       x, y,
       sprite.size[0], sprite.size[1]);
-    x += sprite.size[0] + 1;
+    x += sprite.size[0] + font.spacing;
   }
 }
 
@@ -46,16 +46,20 @@ function getTextWidth(font, text) {
     if (!sprite) {
       sprite = font.spriteMap[' '];
     }
-    accum += sprite.size[0] + 1;
+    accum += sprite.size[0] + font.spacing;
   }
   return accum - 1;
 }
 
 function getDimensions(font, text) {
-  var dim = {x: 4, y: text.length * font.spacing + 4};
+  var margin = font.spacing * 2;
+  var dim = {
+    x: margin,
+    y: text.length * font.lineHeight + margin,
+  };
 
   for (var i = 0; i < text.length; i++) {
-    var width = getTextWidth(font, text[i]) + 4;
+    var width = getTextWidth(font, text[i]) + margin;
     if (width > dim.x) {
       dim.x = width;
     }
@@ -69,7 +73,7 @@ function writeText(font, ctx, text) {
   var y = 0;
   for (var i = 0; i < text.length; i++) {
     writeLine(font, ctx, text[i], 0, y);
-    y += font.spacing;
+    y += font.lineHeight;
   }
 }
 

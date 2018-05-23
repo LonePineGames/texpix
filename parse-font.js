@@ -1,13 +1,18 @@
 module.exports = function parseFont(name, cb) {
-  loadImage(__dirname + '/fonts/' + name + '.png', (canvas, image) => {
+  var filename = __dirname + '/fonts/' + name;
+  var config = JSON.parse(require("fs").readFileSync(filename + '.json'));
+  console.log("config", config);
+  var index = config.index;
+  loadImage(filename + '.png', (canvas, image) => {
     var ctx = canvas.getContext('2d');
     ctx.antialias = 'none';
 
     var font = {
+      ...config,
       canvas,
       ctx,
       image,
-      spacing: 0,
+      lineHeight: 0,
       spriteMap: {},
     };
 
@@ -25,12 +30,6 @@ module.exports = function parseFont(name, cb) {
     cb(font);
   });
 }
-
-const index = [
-  " abcdefghijklmnopqrstuvwxyz",
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-  "\u00A00123456789.,-:;\"\u1680'\u1680~/?()&%=+^",
-];
 
 var Canvas = require('canvas'),
   Image = Canvas.Image,
@@ -59,8 +58,9 @@ function loadImage(name, cb) {
   }*/
 
 function createRow (font, fromRow, toRow, index) {
-  if(font.spacing == 0) {
-    font.spacing = toRow - fromRow - 4;
+  var lineHeight = toRow - fromRow - 2;
+  if(font.lineHeight < lineHeight) {
+    font.lineHeight = lineHeight;
   }
   var fromCol = 0;
   var toCol = 1;
