@@ -8,6 +8,10 @@ function writeLine(font, ctx, line, x, y) {
 
   for(var i=0; i < line.length; i++) {
     var sprite = font.spriteMap[line[i]];
+    if (!sprite) {
+      sprite = font.spriteMap[' '];
+      console.log("character not found: " + line[i]);
+    }
     ctx.drawImage(font.image,
       sprite.location[0], sprite.location[1],
       sprite.size[0], sprite.size[1],
@@ -38,7 +42,11 @@ function readFile(filename, callback) {
 function getTextWidth(font, text) {
   var accum = 0;
   for(var i=0; i < text.length; i++) {
-    accum += font.spriteMap[text[i]].size[0] + 1;
+    var sprite = font.spriteMap[text[i]];
+    if (!sprite) {
+      sprite = font.spriteMap[' '];
+    }
+    accum += sprite.size[0] + 1;
   }
   return accum - 1;
 }

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-FILE=$(readlink -f $1)
+FILE=$(readlink -f $2)
 cd ~/work/texpix
-npm run texpix default $FILE && feh -FZ --force-aliasing $FILE.png
+npm run texpix $1 $FILE && feh -FZ --force-aliasing $FILE.png
