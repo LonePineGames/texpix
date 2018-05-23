@@ -1,0 +1,9 @@
+{
+  "spacing": 2,
+  "index": [
+    " abcdefghijklmnopqrstuvwxyz",
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "\u00A00123456789.,-:;\"\u1680'\u1680~/?()&%=+^"
+  ]
+}
+
