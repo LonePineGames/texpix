@@ -1,0 +1,10 @@
+{
+  "spacing": 1,
+  "index": [
+    " abcdefghijklmnopqrstuvwxyz",
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "0123456789.,-:;\"'~/\\?!",
+    "()&%=+^><"
+  ]
+}
+
