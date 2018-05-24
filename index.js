@@ -34,6 +34,9 @@ function readFile(filename, callback) {
   });
 
   lineReader.on('close', () => {
+    if (result[result.length-1] === '') {
+      result.pop();
+    }
     console.log();
     callback(result);
   });
