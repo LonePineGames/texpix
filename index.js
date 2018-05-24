@@ -51,14 +51,14 @@ function getTextWidth(font, text) {
     }
     accum += sprite.size[0] + font.spacing;
   }
-  return accum - 1;
+  return accum - font.spacing;
 }
 
 function getDimensions(font, text) {
   var margin = font.spacing * 2;
   var dim = {
     x: margin,
-    y: text.length * font.lineHeight + margin,
+    y: (text.length) * (font.lineHeight+font.spacing),
   };
 
   for (var i = 0; i < text.length; i++) {
@@ -76,7 +76,7 @@ function writeText(font, ctx, text) {
   var y = 0;
   for (var i = 0; i < text.length; i++) {
     writeLine(font, ctx, text[i], 0, y);
-    y += font.lineHeight;
+    y += font.lineHeight + font.spacing;
   }
 }
 

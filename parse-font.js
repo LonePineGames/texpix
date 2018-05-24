@@ -58,11 +58,11 @@ function loadImage(name, cb) {
   }*/
 
 function createRow (font, fromRow, toRow, index) {
-  var lineHeight = toRow - fromRow - 2;
+  var lineHeight = toRow - fromRow - 1;
   if(font.lineHeight < lineHeight) {
     font.lineHeight = lineHeight;
   }
-  var fromCol = 0;
+  var fromCol = 1;
   var toCol = 1;
   var ctx = font.ctx;
   for(var i = 0; i < index.length; i ++) {
@@ -70,7 +70,7 @@ function createRow (font, fromRow, toRow, index) {
     for(;pixel === 0 && toCol < font.canvas.width; toCol ++) {
       pixel = ctx.getImageData(toCol, fromRow, 1, 1).data[0];
     }
-    createCharacter(font, fromRow + 2, toRow - 1, fromCol, toCol - 1, index.charAt(i));
+    createCharacter(font, fromRow + 1, toRow - 1, fromCol, toCol - 1, index.charAt(i));
     fromCol = toCol;
     toCol ++;
   }
