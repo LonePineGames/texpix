@@ -3,3 +3,4 @@
 FILE=$(readlink -f $2)
 cd ~/work/texpix
 npm run texpix $1 $FILE && feh -FZ --force-aliasing $FILE.png
+
